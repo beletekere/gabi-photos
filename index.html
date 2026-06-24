@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תיק עבודות | צילום טבע ורחוב</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">גבי סמינה</a>
+            <button class="nav-toggle" id="navToggle" aria-label="תפריט">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#gallery">גלריה</a></li>
+                <li><a href="#services">שירותים</a></li>
+                <li><a href="#prints">הדפסות</a></li>
+                <li><a href="#testimonials">המלצות</a></li>
+                <li><a href="#about">אודות</a></li>
+                <li><a href="#contact">צור קשר</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>גבי סמינה</h1>
+            <p>לוכד רגעים מהטבע והרחוב</p>
+            <a href="#gallery" class="hero-btn">לגלריה</a>
+        </div>
+    </section>
+
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">גלריה</h2>
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">הכל</button>
+                <button class="filter-btn" data-filter="nature">טבע</button>
+                <button class="filter-btn" data-filter="street">רחוב</button>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" data-category="nature">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop" alt="יער ירוק עם ערפל" loading="lazy">
+                        <div class="gallery-caption">יער בערפל</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="nature">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop" alt="שביל ביער" loading="lazy">
+                        <div class="gallery-caption">שביל ביער</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="street">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=400&fit=crop" alt="עיר בשקיעה" loading="lazy">
+                        <div class="gallery-caption">עיר בשקיעה</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="nature">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&h=400&fit=crop" alt="נוף הרים" loading="lazy">
+                        <div class="gallery-caption">נוף הרים</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="street">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&h=400&fit=crop" alt="גשר בלילה" loading="lazy">
+                        <div class="gallery-caption">גשר בלילה</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="nature">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop" alt="חוף זהוב" loading="lazy">
+                        <div class="gallery-caption">חוף זהוב</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="street">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=600&h=400&fit=crop" alt="סמטה ישנה" loading="lazy">
+                        <div class="gallery-caption">סמטה ישנה</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="nature">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop" alt="שקיעה בהרים" loading="lazy">
+                        <div class="gallery-caption">שקיעה בהרים</div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="street">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=400&fit=crop" alt="רחוב גשום" loading="lazy">
+                        <div class="gallery-caption">רחוב גשום</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">שירותים</h2>
+            <p class="section-subtitle">מציע מגוון שירותי צילום מקצועיים — כל פרויקט מקבל תשומת לב אישית</p>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🎉</div>
+                    <h3>צילום אירועים</h3>
+                    <p>ימי הולדת, מסיבות, אירועים משפחתיים ועסקיים. תיעוד מלא של הרגעים המיוחדים שלכם.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">👤</div>
+                    <h3>פורטרטים</h3>
+                    <p>צילומי פורטרט אישיים, תדמית, פרופיל מקצועי ומשפחתי — בסטודיו או בחוץ.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏢</div>
+                    <h3>נדל"ן ועסקים</h3>
+                    <p>צילום נכסים למכירה והשכרה, חללי עבודה, מוצרים ותפריטים לעסקים.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🖼️</div>
+                    <h3>הדפסות למכירה</h3>
+                    <p>הדפסות איכותיות של צילומי טבע ורחוב על קנבס, נייר ארכיוני או מתכת.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="prints" id="prints">
+        <div class="container">
+            <h2 class="section-title">הדפסות למכירה</h2>
+            <p class="section-subtitle">תמונות נבחרות זמינות כהדפסות איכותיות לקישוט הבית או המשרד</p>
+            <div class="prints-grid">
+                <div class="print-card">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&h=350&fit=crop" alt="יער בערפל">
+                    </div>
+                    <div class="print-info">
+                        <h4>יער בערפל</h4>
+                        <p class="print-sizes">זמין בגדלים: 30x40 / 50x70 / 70x100</p>
+                        <a href="#contact" class="print-btn">לפרטים והזמנה</a>
+                    </div>
+                </div>
+                <div class="print-card">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500&h=350&fit=crop" alt="שקיעה בהרים">
+                    </div>
+                    <div class="print-info">
+                        <h4>שקיעה בהרים</h4>
+                        <p class="print-sizes">זמין בגדלים: 30x40 / 50x70 / 70x100</p>
+                        <a href="#contact" class="print-btn">לפרטים והזמנה</a>
+                    </div>
+                </div>
+                <div class="print-card">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=500&h=350&fit=crop" alt="סמטה ישנה">
+                    </div>
+                    <div class="print-info">
+                        <h4>סמטה ישנה</h4>
+                        <p class="print-sizes">זמין בגדלים: 30x40 / 50x70 / 70x100</p>
+                        <a href="#contact" class="print-btn">לפרטים והזמנה</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">מה אומרים עליי</h2>
+            <div class="testimonials-slider">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"גבי צילם לנו את יום ההולדת של הבת שלנו והתוצאות היו מדהימות. הוא הצליח ללכוד רגעים שאפילו לא שמנו לב אליהם. ממליצים בחום!"</p>
+                    <div class="testimonial-author">
+                        <strong>רונית כהן</strong>
+                        <span>אירוע משפחתי</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"הזמנתי צילום תדמית לפרופיל העסקי שלי. גבי גרם לי להרגיש בנוח מול המצלמה, והתמונות יצאו טבעיות ומקצועיות."</p>
+                    <div class="testimonial-author">
+                        <strong>אייל ברק</strong>
+                        <span>צילום תדמית</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"קנינו הדפסה של צילום הנוף שלו לסלון, ואנשים תמיד שואלים מאיפה זה. איכות מטורפת ושירות אדיב."</p>
+                    <div class="testimonial-author">
+                        <strong>מיכל ודני לוי</strong>
+                        <span>הדפסה לסלון</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"גבי צילם את הדירה שלנו למכירה. התמונות היו ברמה אחרת לגמרי — הדירה נמכרה תוך שבועיים! שווה כל שקל."</p>
+                    <div class="testimonial-author">
+                        <strong>יוסי אברהם</strong>
+                        <span>צילום נדל"ן</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"עשינו צילומי משפחה בטבע וזה היה חוויה נפלאה. גבי סבלני, יצירתי ומקצועי. התמונות מושלמות!"</p>
+                    <div class="testimonial-author">
+                        <strong>שירה מזרחי</strong>
+                        <span>צילום משפחתי</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">אודות</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="gallery-frame">
+                        <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=400&fit=crop" alt="תמונת הצלם">
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>שלום, אני גבי סמינה</h3>
+                    <p>צלם מתחיל עם אהבה גדולה לטבע ולרחובות העיר. אני מאמין שכל רגע מחזיק בתוכו סיפור, וכל מה שצריך זה לדעת מתי ללחוץ על הכפתור.</p>
+                    <p>אני מצלם בעיקר נופים, צמחייה, חיות בר, ורחובות עם אופי — סמטאות ישנות, שווקים צבעוניים, ואנשים בסביבתם הטבעית.</p>
+                    <p>מוזמנים לצפות בעבודות שלי וליצור קשר לכל שאלה או הזמנה.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">צור קשר</h2>
+            <div class="contact-content">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">שם מלא</label>
+                        <input type="text" id="name" name="name" required placeholder="השם שלך">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">אימייל</label>
+                        <input type="email" id="email" name="email" required placeholder="example@email.com" dir="ltr">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">הודעה</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="מה תרצו לספר לי?"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">שלח הודעה</button>
+                </form>
+                <div class="contact-info">
+                    <h3>דרכים נוספות ליצירת קשר</h3>
+                    <div class="contact-links">
+                        <a href="tel:+972501234567" class="contact-link">📞 050-123-4567</a>
+                        <a href="mailto:gabi@example.com" class="contact-link">✉️ gabi@example.com</a>
+                        <a href="https://instagram.com/gabisemina" target="_blank" rel="noopener" class="contact-link">📸 @gabisemina</a>
+                        <a href="https://facebook.com/gabisemina" target="_blank" rel="noopener" class="contact-link">👤 גבי סמינה צילום</a>
+                        <a href="https://wa.me/972501234567" target="_blank" rel="noopener" class="contact-link">💬 וואטסאפ</a>
+                    </div>
+                    <p class="contact-note">זמין לשיחות ופניות בימים א'-ה' 9:00-19:00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 גבי סמינה. כל הזכויות שמורות. <a href="admin.html" style="color:var(--beige);opacity:0.5;text-decoration:none;margin-right:16px">ניהול</a></p>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">✕</button>
+        <button class="lightbox-prev" id="lightboxPrev">❮</button>
+        <button class="lightbox-next" id="lightboxNext">❯</button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

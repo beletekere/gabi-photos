@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פאנל ניהול | גבי סמינה</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <h1>פאנל ניהול</h1>
+            <p>גבי סמינה | צילום</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">שם משתמש</label>
+                    <input type="text" id="username" required autocomplete="username" placeholder="שם משתמש">
+                </div>
+                <div class="form-group">
+                    <label for="password">סיסמה</label>
+                    <input type="password" id="password" required autocomplete="current-password" placeholder="סיסמה">
+                </div>
+                <div class="login-error" id="loginError"></div>
+                <button type="submit" class="btn btn-primary btn-full">התחבר</button>
+            </form>
+            <p class="login-hint">ברירת מחדל: admin / admin123</p>
+        </div>
+    </div>
+
+    <div class="admin-app" id="adminApp" style="display:none">
+        <header class="admin-header">
+            <div class="header-right">
+                <h1>פאנל ניהול</h1>
+            </div>
+            <div class="header-left">
+                <a href="index.html" class="btn btn-outline btn-small">צפה באתר</a>
+                <button class="btn btn-outline btn-small" id="changePassBtn">שנה סיסמה</button>
+                <button class="btn btn-danger btn-small" id="logoutBtn">התנתק</button>
+            </div>
+        </header>
+
+        <nav class="admin-nav">
+            <button class="tab-btn active" data-tab="photos">תמונות</button>
+            <button class="tab-btn" data-tab="testimonials">המלצות</button>
+            <button class="tab-btn" data-tab="settings">הגדרות</button>
+        </nav>
+
+        <main class="admin-main">
+
+            <section class="tab-content active" id="tab-photos">
+                <div class="section-header">
+                    <h2>ניהול תמונות</h2>
+                    <button class="btn btn-primary" id="uploadBtn">+ העלה תמונה</button>
+                </div>
+
+                <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
+
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📷</div>
+                    <p>גרור תמונות לכאן או לחץ לבחירה</p>
+                    <p class="upload-hint">ניתן לבחור מספר תמונות בו-זמנית</p>
+                </div>
+
+                <div class="upload-preview" id="uploadPreview" style="display:none">
+                    <h3>תמונות להעלאה</h3>
+                    <div class="preview-grid" id="previewGrid"></div>
+                    <div class="upload-actions">
+                        <button class="btn btn-primary" id="confirmUpload">העלה הכל</button>
+                        <button class="btn btn-outline" id="cancelUpload">ביטול</button>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">הכל</button>
+                    <button class="filter-btn" data-filter="nature">טבע</button>
+                    <button class="filter-btn" data-filter="street">רחוב</button>
+                </div>
+
+                <div class="photos-grid" id="photosGrid"></div>
+                <div class="empty-state" id="photosEmpty" style="display:none">
+                    <p>אין תמונות עדיין. לחץ על "העלה תמונה" כדי להתחיל!</p>
+                </div>
+            </section>
+
+            <section class="tab-content" id="tab-testimonials">
+                <div class="section-header">
+                    <h2>ניהול המלצות</h2>
+                    <button class="btn btn-primary" id="addTestimonialBtn">+ הוסף המלצה</button>
+                </div>
+                <div class="testimonials-list" id="testimonialsList"></div>
+            </section>
+
+            <section class="tab-content" id="tab-settings">
+                <div class="section-header">
+                    <h2>הגדרות אתר</h2>
+                </div>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label for="siteName">שם הצלם</label>
+                        <input type="text" id="siteName" placeholder="גבי סמינה">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTagline">תיאור קצר</label>
+                        <input type="text" id="siteTagline" placeholder="לוכד רגעים מהטבע והרחוב">
+                    </div>
+                    <div class="form-group">
+                        <label for="sitePhone">טלפון</label>
+                        <input type="tel" id="sitePhone" dir="ltr" placeholder="050-123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteEmail">אימייל</label>
+                        <input type="email" id="siteEmail" dir="ltr" placeholder="gabi@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteInstagram">אינסטגרם (שם משתמש)</label>
+                        <input type="text" id="siteInstagram" dir="ltr" placeholder="gabisemina">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteFacebook">פייסבוק (קישור)</label>
+                        <input type="url" id="siteFacebook" dir="ltr" placeholder="https://facebook.com/gabisemina">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteWhatsapp">וואטסאפ (מספר עם קידומת)</label>
+                        <input type="text" id="siteWhatsapp" dir="ltr" placeholder="972501234567">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteAbout">אודות</label>
+                        <textarea id="siteAbout" rows="5" placeholder="ספר על עצמך..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="saveSettingsBtn">שמור הגדרות</button>
+                </div>
+            </section>
+
+        </main>
+
+        <div class="modal-overlay" id="editModal">
+            <div class="modal">
+                <h2 id="modalTitle">עריכת תמונה</h2>
+                <div class="modal-img-container">
+                    <img id="modalImg" src="" alt="">
+                </div>
+                <div class="form-group">
+                    <label for="editCaption">כיתוב</label>
+                    <input type="text" id="editCaption" placeholder="תיאור התמונה">
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">קטגוריה</label>
+                    <select id="editCategory">
+                        <option value="nature">טבע</option>
+                        <option value="street">רחוב</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editForSale">זמין למכירה כהדפסה?</label>
+                    <select id="editForSale">
+                        <option value="no">לא</option>
+                        <option value="yes">כן</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="modalSave">שמור</button>
+                    <button class="btn btn-outline" id="modalCancel">ביטול</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="testimonialModal">
+            <div class="modal">
+                <h2>הוסף/ערוך המלצה</h2>
+                <div class="form-group">
+                    <label for="testName">שם הלקוח</label>
+                    <input type="text" id="testName" placeholder="רונית כהן">
+                </div>
+                <div class="form-group">
+                    <label for="testService">סוג שירות</label>
+                    <input type="text" id="testService" placeholder="צילום אירוע">
+                </div>
+                <div class="form-group">
+                    <label for="testRating">דירוג</label>
+                    <select id="testRating">
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="testText">טקסט ההמלצה</label>
+                    <textarea id="testText" rows="4" placeholder="מה הלקוח אמר..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="testSave">שמור</button>
+                    <button class="btn btn-outline" id="testCancel">ביטול</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="passwordModal">
+            <div class="modal">
+                <h2>שינוי סיסמה</h2>
+                <div class="form-group">
+                    <label for="currentPass">סיסמה נוכחית</label>
+                    <input type="password" id="currentPass">
+                </div>
+                <div class="form-group">
+                    <label for="newPass">סיסמה חדשה</label>
+                    <input type="password" id="newPass">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPass">אימות סיסמה חדשה</label>
+                    <input type="password" id="confirmPass">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="passSave">שמור</button>
+                    <button class="btn btn-outline" id="passCancel">ביטול</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

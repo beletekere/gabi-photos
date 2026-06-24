@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadSettings() {
         const s = getSettings();
-        document.getElementById('siteName').value = s.name || 'גבי סמינה';
+        document.getElementById('siteName').value = s.name || 'גבי סימנה';
         document.getElementById('siteTagline').value = s.tagline || 'לוכד רגעים מהטבע והרחוב';
         document.getElementById('sitePhone').value = s.phone || '';
         document.getElementById('siteEmail').value = s.email || '';

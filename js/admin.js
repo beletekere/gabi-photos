@@ -27,12 +27,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
 
-    function showApp() {
+    async function showApp() {
         loginScreen.style.display = 'none';
         adminApp.style.display = 'block';
+        await seedDefaultPhotos();
         loadPhotos();
         loadTestimonials();
         loadSettings();
+    }
+
+    async function seedDefaultPhotos() {
+        const snapshot = await db.collection('photos').limit(1).get();
+        if (!snapshot.empty) return;
+
+        const demos = [
+            { imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop', caption: 'יער בערפל', category: 'nature', forSale: true },
+            { imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop', caption: 'שביל ביער', category: 'nature', forSale: false },
+            { imageUrl: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=400&fit=crop', caption: 'עיר בשקיעה', category: 'street', forSale: false },
+            { imageUrl: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&h=400&fit=crop', caption: 'נוף הרים', category: 'nature', forSale: false },
+            { imageUrl: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&h=400&fit=crop', caption: 'גשר בלילה', category: 'street', forSale: false },
+            { imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop', caption: 'חוף זהוב', category: 'nature', forSale: false },
+            { imageUrl: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=600&h=400&fit=crop', caption: 'סמטה ישנה', category: 'street', forSale: true },
+            { imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop', caption: 'שקיעה בהרים', category: 'nature', forSale: true },
+            { imageUrl: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&h=400&fit=crop', caption: 'רחוב גשום', category: 'street', forSale: false },
+        ];
+
+        for (let i = 0; i < demos.length; i++) {
+            await db.collection('photos').add({
+                ...demos[i],
+                createdAt: new Date(Date.now() + i).toISOString()
+            });
+        }
     }
 
     if (isLoggedIn()) showApp();
@@ -384,14 +409,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========== SETTINGS ==========
     async function loadSettings() {
         const doc = await db.collection('settings').doc('site').get();
-        const s = doc.exists ? doc.data() : {};
-        document.getElementById('siteName').value = s.name || 'גבי סימנה';
-        document.getElementById('siteTagline').value = s.tagline || 'לוכד רגעים מהטבע והרחוב';
-        document.getElementById('sitePhone').value = s.phone || '054-792-9628';
-        document.getElementById('siteEmail').value = s.email || 'gmeneh777@gmail.com';
-        document.getElementById('siteInstagram').value = s.instagram || 'gabi_smeneh';
+        if (!doc.exists) {
+            const defaults = {
+                name: 'גבי סימנה',
+                tagline: 'לוכד רגעים מהטבע והרחוב',
+                phone: '054-792-9628',
+                email: 'gmeneh777@gmail.com',
+                instagram: 'gabi_smeneh',
+                facebook: '',
+                whatsapp: '972547929628',
+                about: 'צלם מתחיל עם אהבה גדולה לטבע ולרחובות העיר. אני מאמין שכל רגע מחזיק בתוכו סיפור, וכל מה שצריך זה לדעת מתי ללחוץ על הכפתור.\nאני מצלם בעיקר נופים, צמחייה, חיות בר, ורחובות עם אופי — סמטאות ישנות, שווקים צבעוניים, ואנשים בסביבתם הטבעית.\nמוזמנים לצפות בעבודות שלי וליצור קשר לכל שאלה או הזמנה.'
+            };
+            await db.collection('settings').doc('site').set(defaults);
+        }
+        const s = (await db.collection('settings').doc('site').get()).data();
+        document.getElementById('siteName').value = s.name || '';
+        document.getElementById('siteTagline').value = s.tagline || '';
+        document.getElementById('sitePhone').value = s.phone || '';
+        document.getElementById('siteEmail').value = s.email || '';
+        document.getElementById('siteInstagram').value = s.instagram || '';
         document.getElementById('siteFacebook').value = s.facebook || '';
-        document.getElementById('siteWhatsapp').value = s.whatsapp || '972547929628';
+        document.getElementById('siteWhatsapp').value = s.whatsapp || '';
         document.getElementById('siteAbout').value = s.about || '';
     }
 

@@ -216,6 +216,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ========== WHATSAPP POPUP ==========
+    const waPopup = document.getElementById('waPopup');
+    document.getElementById('whatsappBtn').addEventListener('click', () => {
+        waPopup.classList.add('show');
+    });
+    document.getElementById('waCancel').addEventListener('click', () => {
+        waPopup.classList.remove('show');
+    });
+    waPopup.addEventListener('click', (e) => {
+        if (e.target === waPopup) waPopup.classList.remove('show');
+    });
+    document.getElementById('waSend').addEventListener('click', () => {
+        const msg = encodeURIComponent('היי, ראיתי את תיק העבודות שלך באתר ואני מתעניין/ת בשירותי הצילום שלך. אשמח לשמוע פרטים נוספים על מחירים וזמינות. תודה!');
+        window.open('https://wa.me/972547929628?text=' + msg, '_blank');
+        waPopup.classList.remove('show');
+    });
+
     // ========== CONTACT FORM ==========
     const form = document.getElementById('contactForm');
     form.addEventListener('submit', (e) => {

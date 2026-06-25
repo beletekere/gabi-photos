@@ -685,6 +685,83 @@ body {
     box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
 }
 
+/* ========== WHATSAPP POPUP ========== */
+.wa-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.wa-popup.show {
+    display: flex;
+}
+
+.wa-popup-card {
+    background: var(--white);
+    padding: 28px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    direction: rtl;
+}
+
+.wa-popup-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--brown);
+    margin-bottom: 16px;
+}
+
+.wa-popup-msg {
+    background: var(--cream);
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.7;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.wa-popup-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.wa-popup-send {
+    padding: 12px 28px;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.wa-popup-send:hover {
+    background: #1da851;
+}
+
+.wa-popup-cancel {
+    padding: 12px 28px;
+    background: transparent;
+    border: 1px solid var(--beige);
+    color: var(--text-light);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
     .gallery-grid {

@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const doc = await db.collection('settings').doc('site').get();
         if (!doc.exists) {
             const defaults = {
-                name: 'גבי סימנה',
+                name: 'Gabi Photos',
                 tagline: 'לוכד רגעים מהטבע והרחוב',
                 phone: '054-792-9628',
                 email: 'gmeneh777@gmail.com',

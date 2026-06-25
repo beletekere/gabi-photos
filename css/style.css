@@ -235,14 +235,7 @@ body {
 }
 
 .gallery-item {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.gallery-item.visible {
     opacity: 1;
-    transform: translateY(0);
 }
 
 .gallery-item.hidden {
@@ -252,17 +245,11 @@ body {
 .gallery-frame {
     position: relative;
     background: var(--white);
-    padding: 10px;
+    padding: 0;
     border: 1px solid var(--beige);
     box-shadow: var(--shadow);
     cursor: pointer;
     overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.gallery-frame:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(92, 64, 51, 0.2);
 }
 
 .gallery-frame img {
@@ -271,19 +258,31 @@ body {
     object-fit: cover;
     display: block;
     filter: sepia(15%) saturate(90%);
-    transition: filter 0.3s;
+    transition: transform 0.4s, filter 0.4s;
 }
 
 .gallery-frame:hover img {
+    transform: scale(1.08);
     filter: sepia(0%) saturate(100%);
 }
 
 .gallery-caption {
-    text-align: center;
-    padding: 12px 8px 6px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 24px 12px 12px;
+    background: linear-gradient(to top, rgba(30, 20, 15, 0.8) 0%, transparent 100%);
+    color: var(--white);
     font-size: 0.9rem;
-    color: var(--text-light);
     font-style: italic;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.gallery-frame:hover .gallery-caption {
+    opacity: 1;
 }
 
 /* ========== SECTION SUBTITLE ========== */
@@ -662,6 +661,28 @@ body {
     margin-top: 16px;
     font-size: 1.1rem;
     font-style: italic;
+}
+
+/* ========== WHATSAPP FLOAT ========== */
+.whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 56px;
+    height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    z-index: 90;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
 }
 
 /* ========== RESPONSIVE ========== */

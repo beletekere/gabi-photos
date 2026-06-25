@@ -17,14 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => navLinks.classList.remove('open'));
     });
 
-    // ========== SCROLL ANIMATIONS ==========
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.gallery-item').forEach(item => observer.observe(item));
+    // ========== NO SCROLL ANIMATIONS — CLEAN LOAD ==========
 
     // ========== LIGHTBOX ==========
     const lightbox = document.getElementById('lightbox');
@@ -129,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 grid.appendChild(item);
-                observer.observe(item);
                 bindFrame(item.querySelector('.gallery-frame'));
 
                 if (photo.forSale && printsGrid) {

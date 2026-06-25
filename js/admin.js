@@ -119,14 +119,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleFiles(files) {
         pendingFiles = [];
         previewGrid.innerHTML = '';
+        let fileIdx = 0;
         Array.from(files).forEach((file) => {
             if (!file.type.startsWith('image/')) return;
-            pendingFiles.push(file);
+            const idx = fileIdx++;
+            pendingFiles.push({ file, caption: '', category: 'nature' });
             const reader = new FileReader();
             reader.onload = (e) => {
-                const idx = pendingFiles.indexOf(file);
                 const div = document.createElement('div');
                 div.className = 'preview-item';
+                div.dataset.idx = idx;
                 div.innerHTML = `
                     <button class="remove-preview" data-idx="${idx}">✕</button>
                     <img src="${e.target.result}" alt="">
@@ -159,8 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('confirmUpload').addEventListener('click', async () => {
-        const captions = document.querySelectorAll('.preview-caption');
-        const categories = document.querySelectorAll('.preview-category');
         const btn = document.getElementById('confirmUpload');
         btn.textContent = 'מעלה...';
         btn.disabled = true;
@@ -168,14 +168,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 0; i < pendingFiles.length; i++) {
             if (!pendingFiles[i]) continue;
+            const captionEl = document.querySelector(`.preview-caption[data-idx="${i}"]`);
+            const categoryEl = document.querySelector(`.preview-category[data-idx="${i}"]`);
             try {
-                const imageUrl = await uploadToCloudinary(pendingFiles[i]);
+                const imageUrl = await uploadToCloudinary(pendingFiles[i].file);
                 await db.collection('photos').add({
                     imageUrl,
-                    caption: captions[i] ? captions[i].value.trim() || 'ללא כיתוב' : 'ללא כיתוב',
-                    category: categories[i] ? categories[i].value : 'nature',
+                    caption: captionEl ? captionEl.value.trim() || 'ללא כיתוב' : 'ללא כיתוב',
+                    category: categoryEl ? categoryEl.value : 'nature',
                     forSale: false,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: new Date(Date.now() + count).toISOString()
                 });
                 count++;
             } catch (err) {

@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await seedDefaultPhotos();
         loadPhotos();
         loadAlbums();
-        loadTestimonials();
+        loadReviews();
         loadSettings();
     }
 
@@ -304,107 +304,78 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('editModal').classList.remove('show');
     });
 
-    // ========== TESTIMONIALS ==========
-    let editingTestId = null;
+    // ========== REVIEWS ==========
+    async function loadReviews() {
+        const snapshot = await db.collection('reviews').orderBy('createdAt', 'desc').get();
+        const pendingList = document.getElementById('pendingReviewsList');
+        const approvedList = document.getElementById('approvedReviewsList');
+        const pendingEmpty = document.getElementById('pendingEmpty');
+        const approvedEmpty = document.getElementById('approvedEmpty');
 
-    async function loadTestimonials() {
-        const snapshot = await db.collection('testimonials').orderBy('createdAt', 'asc').get();
+        const pending = [];
+        const approved = [];
+        snapshot.docs.forEach(doc => {
+            const data = doc.data();
+            if (data.approved) approved.push({ id: doc.id, ...data });
+            else pending.push({ id: doc.id, ...data });
+        });
 
-        if (snapshot.empty) {
-            const defaults = [
-                { name: 'רונית כהן', service: 'אירוע משפחתי', rating: 5, text: 'גבי צילם לנו את יום ההולדת של הבת שלנו והתוצאות היו מדהימות. הוא הצליח ללכוד רגעים שאפילו לא שמנו לב אליהם. ממליצים בחום!' },
-                { name: 'אייל ברק', service: 'צילום תדמית', rating: 5, text: 'הזמנתי צילום תדמית לפרופיל העסקי שלי. גבי גרם לי להרגיש בנוח מול המצלמה, והתמונות יצאו טבעיות ומקצועיות.' },
-                { name: 'מיכל ודני לוי', service: 'הדפסה לסלון', rating: 5, text: 'קנינו הדפסה של צילום הנוף שלו לסלון, ואנשים תמיד שואלים מאיפה זה. איכות מטורפת ושירות אדיב.' },
-                { name: 'יוסי אברהם', service: 'צילום נדל"ן', rating: 5, text: 'גבי צילם את הדירה שלנו למכירה. התמונות היו ברמה אחרת לגמרי — הדירה נמכרה תוך שבועיים! שווה כל שקל.' },
-                { name: 'שירה מזרחי', service: 'צילום משפחתי', rating: 5, text: 'עשינו צילומי משפחה בטבע וזה היה חוויה נפלאה. גבי סבלני, יצירתי ומקצועי. התמונות מושלמות!' }
-            ];
-            for (const t of defaults) {
-                await db.collection('testimonials').add({ ...t, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            }
-            return loadTestimonials();
-        }
+        pendingEmpty.style.display = pending.length ? 'none' : 'block';
+        approvedEmpty.style.display = approved.length ? 'none' : 'block';
 
-        renderTestimonials(snapshot.docs);
-    }
-
-    function renderTestimonials(docs) {
-        const list = document.getElementById('testimonialsList');
-        list.innerHTML = docs.map(doc => {
-            const t = doc.data();
-            return `
-            <div class="testimonial-admin-card" data-id="${doc.id}">
+        pendingList.innerHTML = pending.map(r => `
+            <div class="testimonial-admin-card" data-id="${r.id}">
                 <div class="test-content">
-                    <strong>${esc(t.name)}</strong>
-                    <span class="test-service">${esc(t.service)}</span>
-                    <div>${'⭐'.repeat(t.rating)}</div>
-                    <p>"${esc(t.text)}"</p>
+                    <strong>${esc(r.name)}</strong>
+                    <span class="test-service">${esc(r.service || '')}</span>
+                    <div>${'⭐'.repeat(r.rating || 5)}</div>
+                    <p>"${esc(r.text)}"</p>
+                    <div style="font-size:0.75rem;color:#888;margin-top:4px">${r.createdAt ? new Date(r.createdAt).toLocaleDateString('he-IL') : ''}</div>
+                </div>
+                <div class="test-actions" style="flex-direction:column;gap:6px">
+                    <button class="btn btn-success btn-small approve-review" data-id="${r.id}">אשר</button>
+                    <button class="btn btn-danger btn-small delete-review" data-id="${r.id}">מחק</button>
+                </div>
+            </div>`).join('');
+
+        approvedList.innerHTML = approved.map(r => `
+            <div class="testimonial-admin-card" data-id="${r.id}">
+                <div class="test-content">
+                    <strong>${esc(r.name)}</strong>
+                    <span class="test-service">${esc(r.service || '')}</span>
+                    <div>${'⭐'.repeat(r.rating || 5)}</div>
+                    <p>"${esc(r.text)}"</p>
                 </div>
                 <div class="test-actions">
-                    <button class="btn btn-outline btn-small edit-test" data-id="${doc.id}">ערוך</button>
-                    <button class="btn btn-danger btn-small delete-test" data-id="${doc.id}">מחק</button>
+                    <button class="btn btn-danger btn-small delete-review" data-id="${r.id}">מחק</button>
                 </div>
-            </div>`;
-        }).join('');
+            </div>`).join('');
     }
 
-    document.getElementById('addTestimonialBtn').addEventListener('click', () => {
-        editingTestId = null;
-        document.getElementById('testName').value = '';
-        document.getElementById('testService').value = '';
-        document.getElementById('testRating').value = '5';
-        document.getElementById('testText').value = '';
-        document.getElementById('testimonialModal').classList.add('show');
-    });
-
-    document.getElementById('testimonialsList').addEventListener('click', async (e) => {
-        const editBtn = e.target.closest('.edit-test');
-        const deleteBtn = e.target.closest('.delete-test');
-
-        if (editBtn) {
-            editingTestId = editBtn.dataset.id;
-            const doc = await db.collection('testimonials').doc(editingTestId).get();
-            const t = doc.data();
-            document.getElementById('testName').value = t.name;
-            document.getElementById('testService').value = t.service;
-            document.getElementById('testRating').value = t.rating;
-            document.getElementById('testText').value = t.text;
-            document.getElementById('testimonialModal').classList.add('show');
+    document.getElementById('pendingReviewsList').addEventListener('click', async (e) => {
+        const approveBtn = e.target.closest('.approve-review');
+        const deleteBtn = e.target.closest('.delete-review');
+        if (approveBtn) {
+            await db.collection('reviews').doc(approveBtn.dataset.id).update({ approved: true });
+            loadReviews();
+            toast('הביקורת אושרה ומופיעה באתר');
         }
-
         if (deleteBtn) {
-            if (!confirm('למחוק את ההמלצה?')) return;
-            await db.collection('testimonials').doc(deleteBtn.dataset.id).delete();
-            loadTestimonials();
-            toast('ההמלצה נמחקה');
+            if (!confirm('למחוק ביקורת זו?')) return;
+            await db.collection('reviews').doc(deleteBtn.dataset.id).delete();
+            loadReviews();
+            toast('הביקורת נמחקה');
         }
     });
 
-    document.getElementById('testSave').addEventListener('click', async () => {
-        const name = document.getElementById('testName').value.trim();
-        const text = document.getElementById('testText').value.trim();
-        if (!name || !text) { toast('נא למלא שם וטקסט', true); return; }
-
-        const entry = {
-            name,
-            service: document.getElementById('testService').value.trim(),
-            rating: +document.getElementById('testRating').value,
-            text
-        };
-
-        if (editingTestId) {
-            await db.collection('testimonials').doc(editingTestId).update(entry);
-        } else {
-            entry.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-            await db.collection('testimonials').add(entry);
+    document.getElementById('approvedReviewsList').addEventListener('click', async (e) => {
+        const deleteBtn = e.target.closest('.delete-review');
+        if (deleteBtn) {
+            if (!confirm('למחוק ביקורת זו?')) return;
+            await db.collection('reviews').doc(deleteBtn.dataset.id).delete();
+            loadReviews();
+            toast('הביקורת נמחקה');
         }
-
-        document.getElementById('testimonialModal').classList.remove('show');
-        loadTestimonials();
-        toast(editingTestId ? 'ההמלצה עודכנה' : 'ההמלצה נוספה');
-    });
-
-    document.getElementById('testCancel').addEventListener('click', () => {
-        document.getElementById('testimonialModal').classList.remove('show');
     });
 
     // ========== SETTINGS ==========

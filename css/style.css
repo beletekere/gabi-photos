@@ -442,6 +442,115 @@ body {
     font-size: 0.85rem;
 }
 
+/* ========== REVIEWS ========== */
+.reviews {
+    padding: 100px 0;
+    background: var(--cream);
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 60px;
+}
+
+.review-card {
+    background: var(--white);
+    padding: 28px;
+    border: 1px solid var(--beige);
+    position: relative;
+}
+
+.review-card::before {
+    content: '"';
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    color: var(--beige);
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    line-height: 1;
+}
+
+.review-stars {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.review-text {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.review-author strong {
+    display: block;
+    color: var(--brown);
+    font-size: 1rem;
+}
+
+.review-author span {
+    color: var(--gold);
+    font-size: 0.85rem;
+}
+
+.review-date {
+    color: var(--text-light);
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.review-empty {
+    text-align: center;
+    color: var(--text-light);
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+.review-form-wrapper {
+    max-width: 550px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 32px;
+    border: 1px solid var(--beige);
+}
+
+.review-form-wrapper h3 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--brown);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 8px;
+    direction: ltr;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.star-rating .star {
+    color: var(--beige);
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.star-rating .star.active {
+    color: #f1c40f;
+}
+
+.review-success {
+    text-align: center;
+    padding: 20px;
+    color: var(--gold);
+    font-size: 1.1rem;
+}
+
 /* ========== CONTACT NOTE ========== */
 .contact-note {
     margin-top: 20px;
@@ -978,7 +1087,7 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .testimonials-slider {
+    .reviews-grid {
         grid-template-columns: 1fr;
     }
 

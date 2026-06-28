@@ -46,7 +46,7 @@
         <nav class="admin-nav">
             <button class="tab-btn active" data-tab="photos">תמונות</button>
             <button class="tab-btn" data-tab="albums">אלבומים</button>
-            <button class="tab-btn" data-tab="testimonials">המלצות</button>
+            <button class="tab-btn" data-tab="reviews">ביקורות</button>
             <button class="tab-btn" data-tab="settings">הגדרות</button>
         </nav>
 
@@ -98,12 +98,16 @@
                 </div>
             </section>
 
-            <section class="tab-content" id="tab-testimonials">
+            <section class="tab-content" id="tab-reviews">
                 <div class="section-header">
-                    <h2>ניהול המלצות</h2>
-                    <button class="btn btn-primary" id="addTestimonialBtn">+ הוסף המלצה</button>
+                    <h2>ביקורות לקוחות</h2>
                 </div>
-                <div class="testimonials-list" id="testimonialsList"></div>
+                <h3 style="color:#B8860B;margin-bottom:12px">ממתינות לאישור</h3>
+                <div class="testimonials-list" id="pendingReviewsList"></div>
+                <div class="empty-state" id="pendingEmpty" style="display:none"><p>אין ביקורות ממתינות</p></div>
+                <h3 style="color:#5C4033;margin:24px 0 12px">ביקורות מאושרות</h3>
+                <div class="testimonials-list" id="approvedReviewsList"></div>
+                <div class="empty-state" id="approvedEmpty" style="display:none"><p>אין ביקורות מאושרות עדיין</p></div>
             </section>
 
             <section class="tab-content" id="tab-settings">

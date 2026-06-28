@@ -153,30 +153,85 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ========== LOAD TESTIMONIALS FROM FIREBASE ==========
-    async function loadTestimonialsFromFirebase() {
+    // ========== LOAD REVIEWS FROM FIREBASE ==========
+    async function loadReviewsFromFirebase() {
         try {
-            const snapshot = await db.collection('testimonials').orderBy('createdAt', 'asc').get();
-            if (snapshot.empty) return;
+            const snapshot = await db.collection('reviews').where('approved', '==', true).orderBy('createdAt', 'desc').get();
+            const grid = document.getElementById('reviewsGrid');
+            const empty = document.getElementById('reviewsEmpty');
+            if (!grid) return;
 
-            const slider = document.querySelector('.testimonials-slider');
-            if (!slider) return;
+            if (snapshot.empty) {
+                grid.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
 
-            slider.innerHTML = snapshot.docs.map(doc => {
-                const t = doc.data();
+            if (empty) empty.style.display = 'none';
+            grid.innerHTML = snapshot.docs.map(doc => {
+                const r = doc.data();
+                const date = r.createdAt ? new Date(r.createdAt).toLocaleDateString('he-IL') : '';
                 return `
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">${'⭐'.repeat(t.rating)}</div>
-                    <p class="testimonial-text">"${esc(t.text)}"</p>
-                    <div class="testimonial-author">
-                        <strong>${esc(t.name)}</strong>
-                        <span>${esc(t.service)}</span>
+                <div class="review-card">
+                    <div class="review-stars">${'⭐'.repeat(r.rating || 5)}</div>
+                    <p class="review-text">"${esc(r.text)}"</p>
+                    <div class="review-author">
+                        <strong>${esc(r.name)}</strong>
+                        <span>${esc(r.service || '')}</span>
                     </div>
+                    <div class="review-date">${date}</div>
                 </div>`;
             }).join('');
         } catch (e) {
             // Firebase not available
         }
+    }
+
+    // ========== REVIEW FORM ==========
+    let selectedRating = 5;
+    const stars = document.querySelectorAll('.star-rating .star');
+    function updateStars(val) {
+        selectedRating = val;
+        stars.forEach(s => {
+            s.classList.toggle('active', +s.dataset.value <= val);
+            s.textContent = +s.dataset.value <= val ? '★' : '☆';
+        });
+    }
+    if (stars.length) {
+        updateStars(5);
+        stars.forEach(s => {
+            s.addEventListener('click', () => updateStars(+s.dataset.value));
+        });
+    }
+
+    const reviewForm = document.getElementById('reviewForm');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reviewName').value.trim();
+            const text = document.getElementById('reviewText').value.trim();
+            if (!name || !text) return;
+
+            const btn = document.getElementById('reviewSubmitBtn');
+            btn.textContent = 'שולח...';
+            btn.disabled = true;
+
+            try {
+                await db.collection('reviews').add({
+                    name,
+                    service: document.getElementById('reviewService').value.trim(),
+                    rating: selectedRating,
+                    text,
+                    approved: false,
+                    createdAt: new Date().toISOString()
+                });
+
+                reviewForm.innerHTML = '<div class="review-success">תודה! הביקורת שלך נשלחה ותפורסם לאחר אישור.</div>';
+            } catch (err) {
+                btn.textContent = 'שלח ביקורת';
+                btn.disabled = false;
+            }
+        });
     }
 
     // ========== LOAD SETTINGS FROM FIREBASE ==========
@@ -259,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== INIT ==========
     loadSettingsFromFirebase();
-    loadTestimonialsFromFirebase();
+    loadReviewsFromFirebase();
     loadPhotosFromFirebase();
 
 });

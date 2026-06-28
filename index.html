@@ -18,7 +18,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="#gallery">גלריה</a></li>
                 <li><a href="#services">שירותים</a></li>
-                <li><a href="#testimonials">המלצות</a></li>
+                <li><a href="#reviews">ביקורות</a></li>
                 <li><a href="#about">אודות</a></li>
                 <li><a href="#contact">צור קשר</a></li>
             </ul>
@@ -71,50 +71,42 @@
         </div>
     </section>
 
-    <section class="testimonials" id="testimonials">
+    <section class="reviews" id="reviews">
         <div class="container">
-            <h2 class="section-title">מה אומרים עליי</h2>
-            <div class="testimonials-slider">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"גבי צילם לנו את יום ההולדת של הבת שלנו והתוצאות היו מדהימות. הוא הצליח ללכוד רגעים שאפילו לא שמנו לב אליהם. ממליצים בחום!"</p>
-                    <div class="testimonial-author">
-                        <strong>רונית כהן</strong>
-                        <span>אירוע משפחתי</span>
+            <h2 class="section-title">ביקורות לקוחות</h2>
+            <div class="reviews-grid" id="reviewsGrid">
+            </div>
+            <div class="review-empty" id="reviewsEmpty" style="display:none">
+                <p>עדיין אין ביקורות. היה הראשון!</p>
+            </div>
+
+            <div class="review-form-wrapper">
+                <h3>עבדת עם גבי? ספר לנו על החוויה</h3>
+                <form class="review-form" id="reviewForm">
+                    <div class="form-group">
+                        <label for="reviewName">השם שלך</label>
+                        <input type="text" id="reviewName" required placeholder="השם שלך">
                     </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"הזמנתי צילום תדמית לפרופיל העסקי שלי. גבי גרם לי להרגיש בנוח מול המצלמה, והתמונות יצאו טבעיות ומקצועיות."</p>
-                    <div class="testimonial-author">
-                        <strong>אייל ברק</strong>
-                        <span>צילום תדמית</span>
+                    <div class="form-group">
+                        <label for="reviewService">סוג השירות</label>
+                        <input type="text" id="reviewService" placeholder="לדוגמה: צילום אירוע, פורטרט...">
                     </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"קנינו הדפסה של צילום הנוף שלו לסלון, ואנשים תמיד שואלים מאיפה זה. איכות מטורפת ושירות אדיב."</p>
-                    <div class="testimonial-author">
-                        <strong>מיכל ודני לוי</strong>
-                        <span>הדפסה לסלון</span>
+                    <div class="form-group">
+                        <label>דירוג</label>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-value="1">☆</span>
+                            <span class="star" data-value="2">☆</span>
+                            <span class="star" data-value="3">☆</span>
+                            <span class="star" data-value="4">☆</span>
+                            <span class="star" data-value="5">☆</span>
+                        </div>
                     </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"גבי צילם את הדירה שלנו למכירה. התמונות היו ברמה אחרת לגמרי — הדירה נמכרה תוך שבועיים! שווה כל שקל."</p>
-                    <div class="testimonial-author">
-                        <strong>יוסי אברהם</strong>
-                        <span>צילום נדל"ן</span>
+                    <div class="form-group">
+                        <label for="reviewText">הביקורת שלך</label>
+                        <textarea id="reviewText" rows="4" required placeholder="ספר על החוויה שלך..."></textarea>
                     </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"עשינו צילומי משפחה בטבע וזה היה חוויה נפלאה. גבי סבלני, יצירתי ומקצועי. התמונות מושלמות!"</p>
-                    <div class="testimonial-author">
-                        <strong>שירה מזרחי</strong>
-                        <span>צילום משפחתי</span>
-                    </div>
-                </div>
+                    <button type="submit" class="submit-btn" id="reviewSubmitBtn">שלח ביקורת</button>
+                </form>
             </div>
         </div>
     </section>

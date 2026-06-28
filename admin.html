@@ -75,10 +75,15 @@
                     </div>
                 </div>
 
-                <div class="filter-bar">
+                <div class="section-header" style="margin-top:20px">
+                    <h3 style="font-size:1rem;color:#5C4033">קטגוריות</h3>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <input type="text" id="newCategoryInput" placeholder="שם קטגוריה חדשה..." style="padding:8px 12px;border:1px solid #D4C5A9;border-radius:4px;font-family:inherit;font-size:0.85rem;width:180px">
+                        <button class="btn btn-primary btn-small" id="addCategoryBtn">+ הוסף</button>
+                    </div>
+                </div>
+                <div class="filter-bar" id="adminFilterBar">
                     <button class="filter-btn active" data-filter="all">הכל</button>
-                    <button class="filter-btn" data-filter="nature">טבע</button>
-                    <button class="filter-btn" data-filter="street">רחוב</button>
                 </div>
 
                 <div class="photos-grid" id="photosGrid"></div>
@@ -165,10 +170,7 @@
                 </div>
                 <div class="form-group">
                     <label for="editCategory">קטגוריה</label>
-                    <select id="editCategory">
-                        <option value="nature">טבע</option>
-                        <option value="street">רחוב</option>
-                    </select>
+                    <select id="editCategory"></select>
                 </div>
                 <div class="form-group">
                     <label for="editForSale">זמין למכירה כהדפסה?</label>

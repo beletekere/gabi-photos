@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginScreen.style.display = 'none';
         adminApp.style.display = 'block';
         await seedDefaultPhotos();
+        await loadCategories();
         loadPhotos();
         loadAlbums();
         loadReviews();
@@ -114,6 +115,71 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ========== CATEGORIES ==========
+    let siteCategories = [];
+
+    async function loadCategories() {
+        const doc = await db.collection('settings').doc('categories').get();
+        if (doc.exists && doc.data().list) {
+            siteCategories = doc.data().list;
+        } else {
+            siteCategories = ['טבע', 'רחוב'];
+            await db.collection('settings').doc('categories').set({ list: siteCategories });
+        }
+        renderCategoryFilters();
+        renderCategoryDropdowns();
+    }
+
+    function renderCategoryFilters() {
+        const bar = document.getElementById('adminFilterBar');
+        bar.innerHTML = '<button class="filter-btn active" data-filter="all">הכל</button>';
+        siteCategories.forEach(cat => {
+            bar.innerHTML += `<button class="filter-btn" data-filter="${esc(cat)}">${esc(cat)}</button>
+            <button class="btn btn-danger btn-small" data-delete-cat="${esc(cat)}" style="padding:4px 8px;font-size:0.7rem;margin-left:-4px">✕</button>`;
+        });
+
+        bar.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                bar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.photo-card').forEach(card => {
+                    card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+                });
+            });
+        });
+
+        bar.querySelectorAll('[data-delete-cat]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const cat = btn.dataset.deleteCat;
+                if (!confirm(`למחוק את הקטגוריה "${cat}"?`)) return;
+                siteCategories = siteCategories.filter(c => c !== cat);
+                await db.collection('settings').doc('categories').set({ list: siteCategories });
+                renderCategoryFilters();
+                renderCategoryDropdowns();
+                toast(`הקטגוריה "${cat}" נמחקה`);
+            });
+        });
+    }
+
+    function renderCategoryDropdowns() {
+        const editSelect = document.getElementById('editCategory');
+        editSelect.innerHTML = siteCategories.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    }
+
+    document.getElementById('addCategoryBtn').addEventListener('click', async () => {
+        const input = document.getElementById('newCategoryInput');
+        const name = input.value.trim();
+        if (!name) return;
+        if (siteCategories.includes(name)) { toast('קטגוריה כבר קיימת', true); return; }
+        siteCategories.push(name);
+        await db.collection('settings').doc('categories').set({ list: siteCategories });
+        input.value = '';
+        renderCategoryFilters();
+        renderCategoryDropdowns();
+        toast(`הקטגוריה "${name}" נוספה`);
+    });
+
     // ========== UPLOAD TO CLOUDINARY ==========
     async function uploadToCloudinary(file) {
         const formData = new FormData();
@@ -160,8 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${e.target.result}" alt="">
                     <input type="text" placeholder="כיתוב..." class="preview-caption" data-idx="${idx}">
                     <select class="preview-category" data-idx="${idx}">
-                        <option value="nature">טבע</option>
-                        <option value="street">רחוב</option>
+                        ${siteCategories.map(c => `<option value="${c}">${c}</option>`).join('')}
                     </select>
                 `;
                 previewGrid.appendChild(div);

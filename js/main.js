@@ -117,6 +117,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const grid = document.querySelector('.gallery-grid');
             const printsGrid = document.querySelector('.prints-grid');
 
+            const filtersDiv = document.getElementById('galleryFilters');
+            try {
+                const catDoc = await db.collection('settings').doc('categories').get();
+                if (catDoc.exists && catDoc.data().list) {
+                    catDoc.data().list.forEach(cat => {
+                        const btn = document.createElement('button');
+                        btn.className = 'filter-btn';
+                        btn.dataset.filter = cat;
+                        btn.textContent = cat;
+                        filtersDiv.appendChild(btn);
+                    });
+                }
+            } catch(e) {}
+
             photos.forEach(photo => {
                 const item = document.createElement('div');
                 item.className = 'gallery-item';

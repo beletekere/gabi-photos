@@ -45,6 +45,7 @@
 
         <nav class="admin-nav">
             <button class="tab-btn active" data-tab="photos">תמונות</button>
+            <button class="tab-btn" data-tab="albums">אלבומים</button>
             <button class="tab-btn" data-tab="testimonials">המלצות</button>
             <button class="tab-btn" data-tab="settings">הגדרות</button>
         </nav>
@@ -83,6 +84,17 @@
                 <div class="photos-grid" id="photosGrid"></div>
                 <div class="empty-state" id="photosEmpty" style="display:none">
                     <p>אין תמונות עדיין. לחץ על "העלה תמונה" כדי להתחיל!</p>
+                </div>
+            </section>
+
+            <section class="tab-content" id="tab-albums">
+                <div class="section-header">
+                    <h2>ניהול אלבומים</h2>
+                    <button class="btn btn-primary" id="addAlbumBtn">+ אלבום חדש</button>
+                </div>
+                <div class="photos-grid" id="albumsAdminGrid"></div>
+                <div class="empty-state" id="albumsAdminEmpty" style="display:none">
+                    <p>אין אלבומים עדיין. לחץ על "אלבום חדש" כדי להתחיל!</p>
                 </div>
             </section>
 
@@ -220,6 +232,47 @@
             </div>
         </div>
     </div>
+
+        <div class="modal-overlay" id="albumModal">
+            <div class="modal">
+                <h2 id="albumModalTitle">אלבום חדש</h2>
+                <div class="form-group">
+                    <label for="albumName">שם האלבום</label>
+                    <input type="text" id="albumName" placeholder="לדוגמה: חתונה של דני ומיכל">
+                </div>
+                <div class="form-group">
+                    <label for="albumDate">תאריך</label>
+                    <input type="date" id="albumDate">
+                </div>
+                <div class="form-group">
+                    <label for="albumDescription">תיאור (לא חובה)</label>
+                    <textarea id="albumDescription" rows="3" placeholder="כמה מילים על יום הצילומים..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>תמונות לאלבום</label>
+                    <input type="file" id="albumFileInput" accept="image/*" multiple>
+                </div>
+                <div class="preview-grid" id="albumPreviewGrid" style="margin-bottom:12px"></div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="albumSave">שמור</button>
+                    <button class="btn btn-outline" id="albumCancel">ביטול</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="albumPhotosModal">
+            <div class="modal" style="max-width:700px">
+                <h2 id="albumPhotosTitle">תמונות באלבום</h2>
+                <div class="form-group">
+                    <label>הוסף תמונות</label>
+                    <input type="file" id="albumAddPhotosInput" accept="image/*" multiple>
+                </div>
+                <div class="photos-grid" id="albumPhotosAdminGrid" style="margin-bottom:12px"></div>
+                <div class="modal-actions">
+                    <button class="btn btn-outline" id="albumPhotosClose">סגור</button>
+                </div>
+            </div>
+        </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>

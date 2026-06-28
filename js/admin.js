@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         adminApp.style.display = 'block';
         await seedDefaultPhotos();
         loadPhotos();
+        loadAlbums();
         loadTestimonials();
         loadSettings();
     }
@@ -446,6 +447,206 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         await db.collection('settings').doc('site').set(settings);
         toast('ההגדרות נשמרו בהצלחה');
+    });
+
+    // ========== ALBUMS ==========
+    let editingAlbumId = null;
+    let albumPendingFiles = [];
+
+    async function loadAlbums() {
+        const snapshot = await db.collection('albums').orderBy('createdAt', 'desc').get();
+        const grid = document.getElementById('albumsAdminGrid');
+        const empty = document.getElementById('albumsAdminEmpty');
+
+        if (snapshot.empty) {
+            grid.innerHTML = '';
+            empty.style.display = 'block';
+            return;
+        }
+
+        empty.style.display = 'none';
+        grid.innerHTML = snapshot.docs.map(doc => {
+            const a = doc.data();
+            return `
+            <div class="photo-card" data-id="${doc.id}">
+                <img src="${esc(a.coverUrl || '')}" alt="${esc(a.name)}" style="${a.coverUrl ? '' : 'background:var(--beige)'}">
+                <div class="photo-card-body">
+                    <div class="caption">${esc(a.name)}</div>
+                    <span class="category-badge">${esc(a.date || '')}</span>
+                    <span class="category-badge">${a.photoCount || 0} תמונות</span>
+                </div>
+                <div class="photo-card-actions">
+                    <button class="btn btn-outline btn-small album-photos-btn" data-id="${doc.id}">תמונות</button>
+                    <button class="btn btn-outline btn-small album-share-btn" data-id="${doc.id}">שתף</button>
+                    <button class="btn btn-danger btn-small album-delete-btn" data-id="${doc.id}">מחק</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    document.getElementById('addAlbumBtn').addEventListener('click', () => {
+        editingAlbumId = null;
+        document.getElementById('albumModalTitle').textContent = 'אלבום חדש';
+        document.getElementById('albumName').value = '';
+        document.getElementById('albumDate').value = '';
+        document.getElementById('albumDescription').value = '';
+        document.getElementById('albumFileInput').value = '';
+        document.getElementById('albumPreviewGrid').innerHTML = '';
+        albumPendingFiles = [];
+        document.getElementById('albumModal').classList.add('show');
+    });
+
+    document.getElementById('albumFileInput').addEventListener('change', (e) => {
+        const grid = document.getElementById('albumPreviewGrid');
+        Array.from(e.target.files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            albumPendingFiles.push(file);
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item';
+                div.innerHTML = `<img src="${ev.target.result}" alt=""><input type="text" placeholder="כיתוב..." class="album-photo-caption">`;
+                grid.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    document.getElementById('albumSave').addEventListener('click', async () => {
+        const name = document.getElementById('albumName').value.trim();
+        if (!name) { toast('נא להזין שם לאלבום', true); return; }
+
+        const btn = document.getElementById('albumSave');
+        btn.textContent = 'שומר...';
+        btn.disabled = true;
+
+        let coverUrl = '';
+        const photoUrls = [];
+
+        for (let i = 0; i < albumPendingFiles.length; i++) {
+            try {
+                const url = await uploadToCloudinary(albumPendingFiles[i]);
+                const captionEl = document.querySelectorAll('.album-photo-caption')[i];
+                photoUrls.push({ imageUrl: url, caption: captionEl ? captionEl.value.trim() || '' : '', order: i });
+                if (i === 0) coverUrl = url;
+            } catch (err) {
+                toast('שגיאה בהעלאת תמונה', true);
+            }
+        }
+
+        const albumData = {
+            name,
+            date: document.getElementById('albumDate').value,
+            description: document.getElementById('albumDescription').value.trim(),
+            coverUrl,
+            photoCount: photoUrls.length,
+            createdAt: new Date().toISOString()
+        };
+
+        const albumRef = await db.collection('albums').add(albumData);
+
+        for (const photo of photoUrls) {
+            await albumRef.collection('photos').add(photo);
+        }
+
+        btn.textContent = 'שמור';
+        btn.disabled = false;
+        albumPendingFiles = [];
+        document.getElementById('albumModal').classList.remove('show');
+        loadAlbums();
+        toast(`אלבום "${name}" נוצר עם ${photoUrls.length} תמונות`);
+    });
+
+    document.getElementById('albumCancel').addEventListener('click', () => {
+        document.getElementById('albumModal').classList.remove('show');
+    });
+
+    document.getElementById('albumsAdminGrid').addEventListener('click', async (e) => {
+        const deleteBtn = e.target.closest('.album-delete-btn');
+        const photosBtn = e.target.closest('.album-photos-btn');
+        const shareBtn = e.target.closest('.album-share-btn');
+
+        if (deleteBtn) {
+            if (!confirm('למחוק את האלבום וכל התמונות שבו?')) return;
+            const id = deleteBtn.dataset.id;
+            const photos = await db.collection('albums').doc(id).collection('photos').get();
+            for (const doc of photos.docs) { await doc.ref.delete(); }
+            await db.collection('albums').doc(id).delete();
+            loadAlbums();
+            toast('האלבום נמחק');
+        }
+
+        if (shareBtn) {
+            const id = shareBtn.dataset.id;
+            const link = window.location.origin.replace('admin.html', '') + '/albums.html?id=' + id;
+            const siteUrl = window.location.href.replace('admin.html', 'albums.html?id=' + id);
+            navigator.clipboard.writeText(siteUrl).then(() => toast('קישור לאלבום הועתק!'));
+        }
+
+        if (photosBtn) {
+            const id = photosBtn.dataset.id;
+            editingAlbumId = id;
+            const albumDoc = await db.collection('albums').doc(id).get();
+            document.getElementById('albumPhotosTitle').textContent = 'תמונות: ' + albumDoc.data().name;
+
+            const snapshot = await db.collection('albums').doc(id).collection('photos').orderBy('order', 'asc').get();
+            const grid = document.getElementById('albumPhotosAdminGrid');
+            grid.innerHTML = snapshot.docs.map(doc => {
+                const p = doc.data();
+                return `
+                <div class="photo-card" data-id="${doc.id}">
+                    <img src="${esc(p.imageUrl)}" alt="${esc(p.caption)}">
+                    <div class="photo-card-body">
+                        <div class="caption">${esc(p.caption || 'ללא כיתוב')}</div>
+                    </div>
+                    <div class="photo-card-actions">
+                        <button class="btn btn-danger btn-small album-photo-delete" data-id="${doc.id}">מחק</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            document.getElementById('albumPhotosModal').classList.add('show');
+        }
+    });
+
+    document.getElementById('albumPhotosAdminGrid').addEventListener('click', async (e) => {
+        const deleteBtn = e.target.closest('.album-photo-delete');
+        if (!deleteBtn || !editingAlbumId) return;
+        if (!confirm('למחוק תמונה זו מהאלבום?')) return;
+        await db.collection('albums').doc(editingAlbumId).collection('photos').doc(deleteBtn.dataset.id).delete();
+        const remaining = await db.collection('albums').doc(editingAlbumId).collection('photos').get();
+        await db.collection('albums').doc(editingAlbumId).update({ photoCount: remaining.size });
+        deleteBtn.closest('.photo-card').remove();
+        toast('התמונה נמחקה מהאלבום');
+    });
+
+    document.getElementById('albumAddPhotosInput').addEventListener('change', async (e) => {
+        if (!editingAlbumId) return;
+        const files = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+        if (!files.length) return;
+        toast('מעלה ' + files.length + ' תמונות...');
+
+        const existing = await db.collection('albums').doc(editingAlbumId).collection('photos').get();
+        let order = existing.size;
+
+        for (const file of files) {
+            const url = await uploadToCloudinary(file);
+            await db.collection('albums').doc(editingAlbumId).collection('photos').add({ imageUrl: url, caption: '', order: order++ });
+        }
+
+        const firstPhoto = (await db.collection('albums').doc(editingAlbumId).collection('photos').orderBy('order', 'asc').limit(1).get()).docs[0];
+        await db.collection('albums').doc(editingAlbumId).update({
+            photoCount: order,
+            coverUrl: firstPhoto ? firstPhoto.data().imageUrl : ''
+        });
+
+        document.querySelectorAll('.album-photos-btn[data-id="' + editingAlbumId + '"]')[0]?.click();
+        loadAlbums();
+        toast(files.length + ' תמונות נוספו לאלבום');
+    });
+
+    document.getElementById('albumPhotosClose').addEventListener('click', () => {
+        document.getElementById('albumPhotosModal').classList.remove('show');
     });
 
     // ========== MODAL CLOSE ON OVERLAY ==========

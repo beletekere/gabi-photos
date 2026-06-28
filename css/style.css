@@ -663,6 +663,207 @@ body {
     font-style: italic;
 }
 
+/* ========== ALBUMS PAGE ========== */
+.albums-page {
+    padding: 100px 0 60px;
+    background: var(--white);
+}
+
+.albums-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.album-card {
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--beige);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: var(--white);
+}
+
+.album-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(92, 64, 51, 0.2);
+}
+
+.album-cover {
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--beige);
+    position: relative;
+}
+
+.album-cover-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(30, 20, 15, 0.7) 0%, transparent 100%);
+}
+
+.album-count {
+    color: var(--white);
+    font-size: 0.85rem;
+}
+
+.album-info {
+    padding: 16px;
+}
+
+.album-info h3 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--brown);
+    margin-bottom: 4px;
+}
+
+.album-info p {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+/* ========== ALBUM VIEW ========== */
+.album-view {
+    padding: 100px 0 60px;
+    background: var(--white);
+}
+
+.album-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.back-btn:hover {
+    color: var(--brown);
+}
+
+.album-description {
+    color: var(--text-light);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto 20px;
+}
+
+.share-btn {
+    padding: 10px 28px;
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.share-btn:hover {
+    background: var(--gold);
+}
+
+.active-link {
+    color: var(--brown) !important;
+}
+
+/* ========== SHARE POPUP ========== */
+.share-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.share-popup.show {
+    display: flex;
+}
+
+.share-popup-card {
+    background: var(--white);
+    padding: 28px;
+    border-radius: 12px;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    direction: rtl;
+}
+
+.share-popup-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.share-popup-desc {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+.share-link-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--beige);
+    background: var(--cream);
+    font-size: 0.85rem;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.share-popup-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.share-copy-btn {
+    padding: 10px 20px;
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+.share-wa-btn {
+    padding: 10px 20px;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+.share-close-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--beige);
+    color: var(--text-light);
+    border-radius: 6px;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
 /* ========== WHATSAPP FLOAT ========== */
 .whatsapp-float {
     position: fixed;
@@ -795,6 +996,15 @@ body {
         grid-template-columns: 1fr;
         gap: 40px;
     }
+
+    .albums-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .album-cover {
+        height: 180px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -848,5 +1058,13 @@ body {
 
     .prints-grid {
         grid-template-columns: 1fr;
+    }
+
+    .albums-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .album-cover {
+        height: 160px;
     }
 }

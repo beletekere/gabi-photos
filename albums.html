@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אלבומים | Gabi Photos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Gabi Photos</a>
+            <button class="nav-toggle" id="navToggle" aria-label="תפריט">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#gallery">גלריה</a></li>
+                <li><a href="albums.html" class="active-link">אלבומים</a></li>
+                <li><a href="index.html#services">שירותים</a></li>
+                <li><a href="index.html#testimonials">המלצות</a></li>
+                <li><a href="index.html#about">אודות</a></li>
+                <li><a href="index.html#contact">צור קשר</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="albums-page" id="albumsPage">
+        <div class="container">
+            <h2 class="section-title">אלבומים</h2>
+            <p class="section-subtitle">מקבצי צילומים מימי עבודה שונים</p>
+            <div class="albums-grid" id="albumsGrid">
+            </div>
+            <div class="empty-state" id="albumsEmpty" style="display:none">
+                <p>אין אלבומים עדיין</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="album-view" id="albumView" style="display:none">
+        <div class="container">
+            <div class="album-header">
+                <a href="albums.html" class="back-btn">← חזרה לאלבומים</a>
+                <h2 class="section-title" id="albumTitle"></h2>
+                <p class="section-subtitle" id="albumDate"></p>
+                <p class="album-description" id="albumDesc"></p>
+                <button class="share-btn" id="shareBtn">שתף אלבום</button>
+            </div>
+            <div class="gallery-grid" id="albumPhotosGrid">
+            </div>
+        </div>
+    </section>
+
+    <div class="share-popup" id="sharePopup">
+        <div class="share-popup-card">
+            <p class="share-popup-title">שיתוף אלבום</p>
+            <p class="share-popup-desc">שלח את הקישור הזה — הוא מציג רק את האלבום הזה</p>
+            <input type="text" class="share-link-input" id="shareLinkInput" readonly dir="ltr">
+            <div class="share-popup-actions">
+                <button class="share-copy-btn" id="shareCopyBtn">העתק קישור</button>
+                <button class="share-wa-btn" id="shareWaBtn">שלח בוואטסאפ</button>
+                <button class="share-close-btn" id="shareCloseBtn">סגור</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">✕</button>
+        <button class="lightbox-prev" id="lightboxPrev">❮</button>
+        <button class="lightbox-next" id="lightboxNext">❯</button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/albums.js"></script>
+</body>
+</html>

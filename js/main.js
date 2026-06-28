@@ -222,11 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     service: document.getElementById('reviewService').value.trim(),
                     rating: selectedRating,
                     text,
-                    approved: false,
+                    approved: true,
                     createdAt: new Date().toISOString()
                 });
 
-                reviewForm.innerHTML = '<div class="review-success">תודה! הביקורת שלך נשלחה ותפורסם לאחר אישור.</div>';
+                reviewForm.innerHTML = '<div class="review-success">תודה! חוות הדעת שלך פורסמה.</div>';
+                loadReviewsFromFirebase();
             } catch (err) {
                 btn.textContent = 'שלח ביקורת';
                 btn.disabled = false;

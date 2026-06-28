@@ -582,8 +582,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (shareBtn) {
             const id = shareBtn.dataset.id;
             const albumDoc = await db.collection('albums').doc(id).get();
-            const token = albumDoc.data().shareToken;
-            const siteUrl = window.location.href.replace('admin.html', 'albums.html?id=' + id + '&token=' + token);
+            let token = albumDoc.data().shareToken;
+            if (!token) {
+                token = Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+                await db.collection('albums').doc(id).update({ shareToken: token });
+            }
+            const base = window.location.href.split('admin.html')[0];
+            const siteUrl = base + 'albums.html?id=' + id + '&token=' + token;
             navigator.clipboard.writeText(siteUrl).then(() => toast('קישור לאלבום הועתק!'));
         }
 

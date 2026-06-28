@@ -21,53 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const params = new URLSearchParams(window.location.search);
     const albumId = params.get('id');
+    const token = params.get('token');
 
-    if (albumId) {
-        loadAlbumView(albumId);
+    if (albumId && token) {
+        loadAlbumView(albumId, token);
     } else {
-        loadAlbumsList();
-    }
-
-    async function loadAlbumsList() {
         document.getElementById('albumsPage').style.display = '';
         document.getElementById('albumView').style.display = 'none';
-
-        const snapshot = await db.collection('albums').orderBy('createdAt', 'desc').get();
-        const grid = document.getElementById('albumsGrid');
-        const empty = document.getElementById('albumsEmpty');
-
-        if (snapshot.empty) {
-            grid.innerHTML = '';
-            empty.style.display = 'block';
-            return;
-        }
-
-        empty.style.display = 'none';
-        grid.innerHTML = snapshot.docs.map(doc => {
-            const a = doc.data();
-            const photoCount = a.photoCount || 0;
-            return `
-            <a href="albums.html?id=${doc.id}" class="album-card">
-                <div class="album-cover" style="background-image: url('${esc(a.coverUrl || '')}')">
-                    <div class="album-cover-overlay">
-                        <span class="album-count">${photoCount} תמונות</span>
-                    </div>
-                </div>
-                <div class="album-info">
-                    <h3>${esc(a.name)}</h3>
-                    <p>${esc(a.date || '')}</p>
-                </div>
-            </a>`;
-        }).join('');
+        document.getElementById('albumsEmpty').style.display = 'block';
+        document.getElementById('albumsEmpty').innerHTML = '<p>אלבום זה אינו זמין. ודא שקיבלת קישור תקין.</p>';
     }
 
-    async function loadAlbumView(id) {
+    async function loadAlbumView(id, token) {
         document.getElementById('albumsPage').style.display = 'none';
         document.getElementById('albumView').style.display = '';
 
         const albumDoc = await db.collection('albums').doc(id).get();
-        if (!albumDoc.exists) {
-            document.getElementById('albumTitle').textContent = 'האלבום לא נמצא';
+        if (!albumDoc.exists || albumDoc.data().shareToken !== token) {
+            document.getElementById('albumTitle').textContent = 'האלבום לא נמצא או שהקישור אינו תקין';
             return;
         }
 
@@ -100,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Share
-        const shareLink = window.location.origin + window.location.pathname + '?id=' + id;
+        const shareLink = window.location.origin + window.location.pathname + '?id=' + id + '&token=' + album.shareToken;
         document.getElementById('shareBtn').addEventListener('click', () => {
             document.getElementById('shareLinkInput').value = shareLink;
             document.getElementById('sharePopup').classList.add('show');

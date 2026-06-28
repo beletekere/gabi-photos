@@ -534,12 +534,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        const shareToken = Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+
         const albumData = {
             name,
             date: document.getElementById('albumDate').value,
             description: document.getElementById('albumDescription').value.trim(),
             coverUrl,
             photoCount: photoUrls.length,
+            shareToken,
             createdAt: new Date().toISOString()
         };
 
@@ -578,8 +581,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (shareBtn) {
             const id = shareBtn.dataset.id;
-            const link = window.location.origin.replace('admin.html', '') + '/albums.html?id=' + id;
-            const siteUrl = window.location.href.replace('admin.html', 'albums.html?id=' + id);
+            const albumDoc = await db.collection('albums').doc(id).get();
+            const token = albumDoc.data().shareToken;
+            const siteUrl = window.location.href.replace('admin.html', 'albums.html?id=' + id + '&token=' + token);
             navigator.clipboard.writeText(siteUrl).then(() => toast('קישור לאלבום הועתק!'));
         }
 

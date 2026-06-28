@@ -170,20 +170,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========== LOAD REVIEWS FROM FIREBASE ==========
     async function loadReviewsFromFirebase() {
         try {
-            const snapshot = await db.collection('reviews').where('approved', '==', true).orderBy('createdAt', 'desc').get();
+            const snapshot = await db.collection('reviews').get();
+            const allReviews = snapshot.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.approved);
+            allReviews.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
             const grid = document.getElementById('reviewsGrid');
             const empty = document.getElementById('reviewsEmpty');
             if (!grid) return;
 
-            if (snapshot.empty) {
+            if (allReviews.length === 0) {
                 grid.innerHTML = '';
                 if (empty) empty.style.display = 'block';
                 return;
             }
 
             if (empty) empty.style.display = 'none';
-            grid.innerHTML = snapshot.docs.map(doc => {
-                const r = doc.data();
+            grid.innerHTML = allReviews.map(r => {
                 const date = r.createdAt ? new Date(r.createdAt).toLocaleDateString('he-IL') : '';
                 return `
                 <div class="review-card">

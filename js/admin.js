@@ -659,9 +659,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="photo-card" data-id="${doc.id}">
                     <img src="${esc(p.imageUrl)}" alt="${esc(p.caption)}">
                     <div class="photo-card-body">
-                        <div class="caption">${esc(p.caption || 'ללא כיתוב')}</div>
+                        <input type="text" class="album-photo-caption-edit" data-id="${doc.id}" value="${esc(p.caption || '')}" placeholder="כיתוב..." style="width:100%;padding:6px;border:1px solid #D4C5A9;border-radius:4px;font-family:inherit;font-size:0.8rem;margin-bottom:6px">
                     </div>
                     <div class="photo-card-actions">
+                        <button class="btn btn-outline btn-small album-photo-save" data-id="${doc.id}">שמור</button>
                         <button class="btn btn-danger btn-small album-photo-delete" data-id="${doc.id}">מחק</button>
                     </div>
                 </div>`;
@@ -673,13 +674,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('albumPhotosAdminGrid').addEventListener('click', async (e) => {
         const deleteBtn = e.target.closest('.album-photo-delete');
-        if (!deleteBtn || !editingAlbumId) return;
-        if (!confirm('למחוק תמונה זו מהאלבום?')) return;
-        await db.collection('albums').doc(editingAlbumId).collection('photos').doc(deleteBtn.dataset.id).delete();
-        const remaining = await db.collection('albums').doc(editingAlbumId).collection('photos').get();
-        await db.collection('albums').doc(editingAlbumId).update({ photoCount: remaining.size });
-        deleteBtn.closest('.photo-card').remove();
-        toast('התמונה נמחקה מהאלבום');
+        const saveBtn = e.target.closest('.album-photo-save');
+
+        if (saveBtn && editingAlbumId) {
+            const id = saveBtn.dataset.id;
+            const input = document.querySelector(`.album-photo-caption-edit[data-id="${id}"]`);
+            await db.collection('albums').doc(editingAlbumId).collection('photos').doc(id).update({ caption: input.value.trim() });
+            toast('הכיתוב עודכן');
+        }
+
+        if (deleteBtn && editingAlbumId) {
+            if (!confirm('למחוק תמונה זו מהאלבום?')) return;
+            await db.collection('albums').doc(editingAlbumId).collection('photos').doc(deleteBtn.dataset.id).delete();
+            const remaining = await db.collection('albums').doc(editingAlbumId).collection('photos').get();
+            await db.collection('albums').doc(editingAlbumId).update({ photoCount: remaining.size });
+            deleteBtn.closest('.photo-card').remove();
+            toast('התמונה נמחקה מהאלבום');
+        }
     });
 
     document.getElementById('albumAddPhotosInput').addEventListener('change', async (e) => {

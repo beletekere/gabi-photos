@@ -589,7 +589,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const base = window.location.href.split('admin.html')[0];
             const siteUrl = base + 'albums.html?id=' + id + '&token=' + token;
-            navigator.clipboard.writeText(siteUrl).then(() => toast('קישור לאלבום הועתק!'));
+
+            document.getElementById('shareAlbumLink').value = siteUrl;
+            document.getElementById('shareAlbumModal').classList.add('show');
+
+            document.getElementById('shareAlbumCopy').onclick = () => {
+                const input = document.getElementById('shareAlbumLink');
+                input.select();
+                document.execCommand('copy');
+                document.getElementById('shareAlbumCopy').textContent = 'הועתק!';
+                setTimeout(() => { document.getElementById('shareAlbumCopy').textContent = 'העתק קישור'; }, 2000);
+            };
+            document.getElementById('shareAlbumWa').onclick = () => {
+                const msg = encodeURIComponent('היי, הנה אלבום הצילומים: ' + siteUrl);
+                window.open('https://wa.me/?text=' + msg, '_blank');
+            };
+            document.getElementById('shareAlbumClose').onclick = () => {
+                document.getElementById('shareAlbumModal').classList.remove('show');
+            };
         }
 
         if (photosBtn) {

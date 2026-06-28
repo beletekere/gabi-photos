@@ -233,6 +233,21 @@
         </div>
     </div>
 
+        <div class="modal-overlay" id="shareAlbumModal">
+            <div class="modal">
+                <h2>שיתוף אלבום</h2>
+                <p style="color:#6b5b4f;margin-bottom:12px">שלח את הקישור הזה — הוא מציג רק את האלבום</p>
+                <div class="form-group">
+                    <input type="text" id="shareAlbumLink" readonly dir="ltr" style="font-size:0.85rem" onclick="this.select()">
+                </div>
+                <div class="modal-actions" style="flex-wrap:wrap">
+                    <button class="btn btn-primary" id="shareAlbumCopy">העתק קישור</button>
+                    <button class="btn btn-success" id="shareAlbumWa" style="background:#25D366">שלח בוואטסאפ</button>
+                    <button class="btn btn-outline" id="shareAlbumClose">סגור</button>
+                </div>
+            </div>
+        </div>
+
         <div class="modal-overlay" id="albumModal">
             <div class="modal">
                 <h2 id="albumModalTitle">אלבום חדש</h2>

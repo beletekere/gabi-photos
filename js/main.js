@@ -104,14 +104,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========== LOAD PHOTOS FROM FIREBASE ==========
     async function loadPhotosFromFirebase() {
         try {
-            const snapshot = await db.collection('photos').orderBy('createdAt', 'asc').get();
+            const snapshot = await db.collection('photos').get();
             if (snapshot.empty) return;
+
+            const photos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            photos.sort((a, b) => {
+                const tA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : new Date(a.createdAt).getTime();
+                const tB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : new Date(b.createdAt).getTime();
+                return tA - tB;
+            });
 
             const grid = document.querySelector('.gallery-grid');
             const printsGrid = document.querySelector('.prints-grid');
 
-            snapshot.docs.forEach(doc => {
-                const photo = doc.data();
+            photos.forEach(photo => {
                 const item = document.createElement('div');
                 item.className = 'gallery-item';
                 item.dataset.category = photo.category;
